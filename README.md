@@ -208,14 +208,7 @@ ros2 topic echo /is_avoiding
 * Real-world hardware implementation
 * Dynamic obstacle handling
 
----
 
-## 13. Author
-
-Retesh G S
-
----
-
-## 14. License
+## 13. License
 
 This project is intended for academic use.
