@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <world name="line_tracking_world">
+
+    <!-- =================== PHYSICS =================== -->
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <!-- =================== REQUIRED SYSTEM PLUGINS =================== -->
+    <!-- These MUST all be present for Gazebo Harmonic to work correctly -->
+    <plugin filename="gz-sim-physics-system"
+            name="gz::sim::systems::Physics"/>
+
+    <plugin filename="gz-sim-user-commands-system"
+            name="gz::sim::systems::UserCommands"/>
+
+    <plugin filename="gz-sim-scene-broadcaster-system"
+            name="gz::sim::systems::SceneBroadcaster"/>
+
+    <!-- Sensors plugin - REQUIRED for camera and lidar to publish data -->
+    <plugin filename="gz-sim-sensors-system"
+            name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <plugin filename="gz-sim-contact-system"
+            name="gz::sim::systems::Contact"/>
+
+    <!-- =================== LIGHTING =================== -->
+    <light name="sun" type="directional">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+      <attenuation>
+        <range>1000</range>
+        <linear>0.01</linear>
+        <constant>0.9</constant>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+    </light>
+
+    <!-- =================== WHITE GROUND PLANE =================== -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>20 20</size></plane>
+          </geometry>
+          <surface>
+            <friction><ode><mu>1</mu><mu2>1</mu2></ode></friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <cast_shadows>false</cast_shadows>
+          <geometry>
+            <plane><normal>0 0 1</normal><size>20 20</size></plane>
+          </geometry>
+          <material>
+            <ambient>0.9 0.9 0.9 1</ambient>
+            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- =================== BLACK LINE TRACK =================== -->
+
+    <model name="track_bottom"><static>true</static><pose>0 -3 0.001 0 0 0</pose>
+      <link name="link">
+        <visual name="v"><geometry><box><size>6.0 0.08 0.002</size></box></geometry>
+          <material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material></visual>
+        <collision name="c"><geometry><box><size>6.0 0.08 0.002</size></box></geometry></collision>
+      </link>
+    </model>
+
+    <model name="track_top"><static>true</static><pose>0 3 0.001 0 0 0</pose>
+      <link name="link">
+        <visual name="v"><geometry><box><size>6.0 0.08 0.002</size></box></geometry>
+          <material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material></visual>
+        <collision name="c"><geometry><box><size>6.0 0.08 0.002</size></box></geometry></collision>
+      </link>
+    </model>
+
+    <model name="track_right"><static>true</static><pose>3 0 0.001 0 0 0</pose>
+      <link name="link">
+        <visual name="v"><geometry><box><size>0.08 6.0 0.002</size></box></geometry>
+          <material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material></visual>
+        <collision name="c"><geometry><box><size>0.08 6.0 0.002</size></box></geometry></collision>
+      </link>
+    </model>
+
+    <model name="track_left"><static>true</static><pose>-3 0 0.001 0 0 0</pose>
+      <link name="link">
+        <visual name="v"><geometry><box><size>0.08 6.0 0.002</size></box></geometry>
+          <material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material></visual>
+        <collision name="c"><geometry><box><size>0.08 6.0 0.002</size></box></geometry></collision>
+      </link>
+    </model>
+
+    <!-- Corners -->
+    <model name="corner_tr"><static>true</static><pose>3  3 0.001 0 0 0</pose><link name="link">
+      <visual name="v"><geometry><box><size>0.08 0.08 0.002</size></box></geometry><material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material></visual>
+      <collision name="c"><geometry><box><size>0.08 0.08 0.002</size></box></geometry></collision></link></model>
+
+    <model name="corner_tl"><static>true</static><pose>-3  3 0.001 0 0 0</pose><link name="link">
+      <visual name="v"><geometry><box><size>0.08 0.08 0.002</size></box></geometry><material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material></visual>
+      <collision name="c"><geometry><box><size>0.08 0.08 0.002</size></box></geometry></collision></link></model>
+
+    <model name="corner_br"><static>true</static><pose>3 -3 0.001 0 0 0</pose><link name="link">
+      <visual name="v"><geometry><box><size>0.08 0.08 0.002</size></box></geometry><material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material></visual>
+      <collision name="c"><geometry><box><size>0.08 0.08 0.002</size></box></geometry></collision></link></model>
+
+    <model name="corner_bl"><static>true</static><pose>-3 -3 0.001 0 0 0</pose><link name="link">
+      <visual name="v"><geometry><box><size>0.08 0.08 0.002</size></box></geometry><material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material></visual>
+      <collision name="c"><geometry><box><size>0.08 0.08 0.002</size></box></geometry></collision></link></model>
+
+    <!-- =================== OBSTACLES =================== -->
+
+    <model name="obstacle_1"><static>true</static><pose>1.5 -3 0.15 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.2 0.2 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.2 0.2 0.3</size></box></geometry>
+          <material><ambient>1.0 0.3 0.0 1</ambient><diffuse>1.0 0.3 0.0 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <model name="obstacle_2"><static>true</static><pose>3 1.0 0.2 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><cylinder><radius>0.12</radius><length>0.4</length></cylinder></geometry></collision>
+        <visual name="v"><geometry><cylinder><radius>0.12</radius><length>0.4</length></cylinder></geometry>
+          <material><ambient>0.8 0.0 0.2 1</ambient><diffuse>0.8 0.0 0.2 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <model name="obstacle_3"><static>true</static><pose>-1.0 3 0.15 0 0 0.785</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.25 0.15 0.3</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.25 0.15 0.3</size></box></geometry>
+          <material><ambient>0.2 0.6 0.0 1</ambient><diffuse>0.2 0.6 0.0 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <model name="obstacle_4"><static>true</static><pose>-3 -1.5 0.2 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><cylinder><radius>0.1</radius><length>0.4</length></cylinder></geometry></collision>
+        <visual name="v"><geometry><cylinder><radius>0.1</radius><length>0.4</length></cylinder></geometry>
+          <material><ambient>0.0 0.4 0.9 1</ambient><diffuse>0.0 0.4 0.9 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- =================== BOUNDARY WALLS =================== -->
+    <model name="wall_north"><static>true</static><pose>0  7 0.5 0 0 0</pose><link name="link">
+      <collision name="c"><geometry><box><size>14 0.2 1</size></box></geometry></collision>
+      <visual name="v"><geometry><box><size>14 0.2 1</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material></visual></link></model>
+
+    <model name="wall_south"><static>true</static><pose>0 -7 0.5 0 0 0</pose><link name="link">
+      <collision name="c"><geometry><box><size>14 0.2 1</size></box></geometry></collision>
+      <visual name="v"><geometry><box><size>14 0.2 1</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material></visual></link></model>
+
+    <model name="wall_east"><static>true</static><pose> 7 0 0.5 0 0 0</pose><link name="link">
+      <collision name="c"><geometry><box><size>0.2 14 1</size></box></geometry></collision>
+      <visual name="v"><geometry><box><size>0.2 14 1</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material></visual></link></model>
+
+    <model name="wall_west"><static>true</static><pose>-7 0 0.5 0 0 0</pose><link name="link">
+      <collision name="c"><geometry><box><size>0.2 14 1</size></box></geometry></collision>
+      <visual name="v"><geometry><box><size>0.2 14 1</size></box></geometry><material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material></visual></link></model>
+
+  </world>
+</sdf>

@@ -1,0 +1,11 @@
+build/
+install/
+log/
+PROJECT/build/
+PROJECT/install/
+PROJECT/log/
+PROJECT/line_tracking_jazzy/build/
+PROJECT/line_tracking_jazzy/install/
+PROJECT/line_tracking_jazzy/log/
+*.pyc
+__pycache__/
